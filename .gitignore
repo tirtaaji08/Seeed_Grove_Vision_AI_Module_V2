@@ -38,4 +38,9 @@ we2_image_gen_local/Images*.txt
 *.map
 *.img
 
+vela_venv/
+.venv/
+venv/
+env/
+
 .vscode/
