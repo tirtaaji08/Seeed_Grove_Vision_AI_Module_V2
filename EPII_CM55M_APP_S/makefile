@@ -155,7 +155,7 @@ CUSTOMER ?= seeed
 # tflm_mb_cls
 # torch_mb_cls
 ##
-APP_TYPE = allon_sensor_tflm
+APP_TYPE = tflm_hr
  
 ### Options above must be added before include options.mk ###
 override EPII_ROOT := $(strip $(subst \,/,$(EPII_ROOT)))

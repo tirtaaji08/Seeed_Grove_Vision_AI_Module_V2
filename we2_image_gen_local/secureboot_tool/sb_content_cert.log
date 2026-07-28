@@ -2840,3 +2840,87 @@ nvcounter-val:	1
 cert-pkg:	cert/ICVSBContent.crt
 2023-12-06 17:06:38,415 - **** Creating Content Certificate ****
 2023-12-06 17:06:38,422 - **** Certificate file (context) creation has been completed successfully ****
+2026-07-28 13:24:17,014 - Content Certificate Generation Utility started (Logging to sb_content_cert.log)
+2026-07-28 13:24:17,016 - Parsing config file: cert/cfg/ICVSBContent.cfg
+2026-07-28 13:24:17,018 - Parsed config items:
+cert-keypair:	cert/key/ICVSBContent.pem
+cert-keypair-pwd:	cert/key/ICVSBContent.pwd
+load-verify-scheme:	0
+crypto-type:	0
+aes-ce-id:	0
+aes-enc-key:	cert/key/KCEICV.txt
+images-table:	cert/Images.txt
+nvcounter-val:	1
+cert-pkg:	cert/ICVSBContent.crt
+2026-07-28 13:24:17,020 - **** Creating Content Certificate ****
+2026-07-28 13:24:17,038 - **** Certificate file (context) creation has been completed successfully ****
+2026-07-28 13:24:17,444 - Content Certificate Generation Utility started (Logging to sb_content_cert.log)
+2026-07-28 13:24:17,445 - Parsing config file: cert/cfg/ICVSBContent.cfg
+2026-07-28 13:24:17,446 - Parsed config items:
+cert-keypair:	cert/key/ICVSBContent.pem
+cert-keypair-pwd:	cert/key/ICVSBContent.pwd
+load-verify-scheme:	0
+crypto-type:	0
+aes-ce-id:	0
+aes-enc-key:	cert/key/KCEICV.txt
+images-table:	cert/Images.txt
+nvcounter-val:	1
+cert-pkg:	cert/ICVSBContent.crt
+2026-07-28 13:24:17,447 - **** Creating Content Certificate ****
+2026-07-28 13:24:17,464 - **** Certificate file (context) creation has been completed successfully ****
+2026-07-28 13:24:17,950 - Content Certificate Generation Utility started (Logging to sb_content_cert.log)
+2026-07-28 13:24:17,951 - Parsing config file: cert/cfg/ICVSBContent.cfg
+2026-07-28 13:24:17,952 - Parsed config items:
+cert-keypair:	cert/key/ICVSBContent.pem
+cert-keypair-pwd:	cert/key/ICVSBContent.pwd
+load-verify-scheme:	0
+crypto-type:	0
+aes-ce-id:	0
+aes-enc-key:	cert/key/KCEICV.txt
+images-table:	cert/Images.txt
+nvcounter-val:	1
+cert-pkg:	cert/ICVSBContent.crt
+2026-07-28 13:24:17,953 - **** Creating Content Certificate ****
+2026-07-28 13:24:17,968 - **** Certificate file (context) creation has been completed successfully ****
+2026-07-28 13:24:18,368 - Content Certificate Generation Utility started (Logging to sb_content_cert.log)
+2026-07-28 13:24:18,369 - Parsing config file: cert/cfg/ICVSBContent.cfg
+2026-07-28 13:24:18,370 - Parsed config items:
+cert-keypair:	cert/key/ICVSBContent.pem
+cert-keypair-pwd:	cert/key/ICVSBContent.pwd
+load-verify-scheme:	0
+crypto-type:	0
+aes-ce-id:	0
+aes-enc-key:	cert/key/KCEICV.txt
+images-table:	cert/Images.txt
+nvcounter-val:	1
+cert-pkg:	cert/ICVSBContent.crt
+2026-07-28 13:24:18,371 - **** Creating Content Certificate ****
+2026-07-28 13:24:18,387 - **** Certificate file (context) creation has been completed successfully ****
+2026-07-28 13:24:19,694 - Content Certificate Generation Utility started (Logging to sb_content_cert.log)
+2026-07-28 13:24:19,695 - Parsing config file: cert/cfg/ICVSBContent.cfg
+2026-07-28 13:24:19,696 - Parsed config items:
+cert-keypair:	cert/key/ICVSBContent.pem
+cert-keypair-pwd:	cert/key/ICVSBContent.pwd
+load-verify-scheme:	0
+crypto-type:	0
+aes-ce-id:	0
+aes-enc-key:	cert/key/KCEICV.txt
+images-table:	cert/Images.txt
+nvcounter-val:	1
+cert-pkg:	cert/ICVSBContent.crt
+2026-07-28 13:24:19,697 - **** Creating Content Certificate ****
+2026-07-28 13:24:19,710 - **** Certificate file (context) creation has been completed successfully ****
+2026-07-28 13:24:20,109 - Content Certificate Generation Utility started (Logging to sb_content_cert.log)
+2026-07-28 13:24:20,110 - Parsing config file: cert/cfg/ICVSBContent.cfg
+2026-07-28 13:24:20,111 - Parsed config items:
+cert-keypair:	cert/key/ICVSBContent.pem
+cert-keypair-pwd:	cert/key/ICVSBContent.pwd
+load-verify-scheme:	0
+crypto-type:	0
+aes-ce-id:	0
+aes-enc-key:	cert/key/KCEICV.txt
+images-table:	cert/Images.txt
+nvcounter-val:	1
+cert-pkg:	cert/ICVSBContent.crt
+2026-07-28 13:24:20,111 - **** Creating Content Certificate ****
+2026-07-28 13:24:20,125 - **** Certificate file (context) creation has been completed successfully ****
