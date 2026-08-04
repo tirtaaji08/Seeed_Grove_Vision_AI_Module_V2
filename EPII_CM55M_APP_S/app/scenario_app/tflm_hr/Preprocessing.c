@@ -3,6 +3,16 @@
 
 #define RAW_SAMPLE_PERIOD_MS  10.0f 
 
+// ============================================================
+// DC REMOVAL — IIR Highpass Filter
+// Rumus: y[n] = alpha * (y[n-1] + x[n] - x[n-1])
+// alpha = tau / (tau + 1/fs) di mana tau = 1 / (2*pi*fc)
+// fc = 0.5 Hz, fs = 32 Hz → alpha ≈ 0.9029
+// Ini menghilangkan drift DC lambat tanpa mempengaruhi
+// komponen pulsatil PPG (0.5–4 Hz)
+// ============================================================
+#define HPF_ALPHA   0.9029f 
+
 // Buffer internal untuk menyimpan sinyal mentah (32Hz)
 static float raw_buffer[RAW_BUFFER_SIZE];
 static int buffer_index = 0;
@@ -14,52 +24,64 @@ static float time_32hz = 0.0f;
 static float prev_sample_100hz = 0.0f;
 static bool is_first_sample = true;
 
-void ppg_add_sample_100hz(uint32_t raw_sample_100hz) {
-    float curr_sample_100hz = (float)raw_sample_100hz;
+// State IIR highpass filter
+static float hpf_prev_input  = 0.0f;
+static float hpf_prev_output = 0.0f;
 
-    // Inisialisasi pada titik data pertama (t = 0)
-    if (is_first_sample) {
-        prev_sample_100hz = curr_sample_100hz;
-        time_100hz = 0.0f;
-        time_32hz = 0.0f;
-        is_first_sample = false;
+static float apply_highpass_filter(float x_new) {
+    float y_new = HPF_ALPHA * (hpf_prev_output + x_new - hpf_prev_input);
+    hpf_prev_input  = x_new;
+    hpf_prev_output = y_new;
+    return y_new;
+}
 
-        if (buffer_index < RAW_BUFFER_SIZE) {
-            raw_buffer[buffer_index++] = curr_sample_100hz;
+// ============================================================
+// INTERNAL: Tulis satu sampel ke buffer setelah filter HPF
+// ============================================================
+static void write_to_buffer(float sample) {
+    float filtered = apply_highpass_filter(sample);
+    if (buffer_index < RAW_BUFFER_SIZE) {
+        raw_buffer[buffer_index++] = filtered;
+        if (buffer_index >= RAW_BUFFER_SIZE) {
+            is_ready = true;
         }
+    }
+}
+
+void ppg_add_sample_100hz(uint32_t raw_sample_100hz) {
+     float curr = (float)raw_sample_100hz;
+
+    if (is_first_sample) {
+        prev_sample_100hz  = curr;
+        time_100hz      = 0.0f;
+        time_32hz       = 0.0f;
+        is_first_sample = false;
+        // Sampel pertama langsung tulis tanpa interpolasi
+        write_to_buffer(curr);
         time_32hz += 31.25f;
         return;
     }
 
-    // Majukan waktu kedatangan sensor (1 detik / 50 Hz = 20 ms)
-    // PENTING: ini selalu jalan, buffer penuh atau tidak,
-    // supaya jam virtual tidak pernah "berhenti" saat konsumen sedang sibuk.
-    time_100hz += RAW_SAMPLE_PERIOD_MS;
+    // Majukan jam virtual 100 Hz (selalu, agar tidak diskontinuitas)
+    time_100hz += RAW_SAMPLE_PERIOD_MS;  // +10ms per sampel
 
-    while (time_32hz <= time_100hz) {
-        float t0 = time_100hz - RAW_SAMPLE_PERIOD_MS;
-        float fraksi_waktu = (time_32hz - t0) / 20.0f;
-        float titik_interpolasi = prev_sample_100hz + (fraksi_waktu * (curr_sample_100hz - prev_sample_100hz));
+    // Hasilkan sampel 32 Hz selama interval ini masih ada
+    while (time_32hz <= time_100hz && buffer_index < RAW_BUFFER_SIZE) {
+        float t0           = time_100hz - RAW_SAMPLE_PERIOD_MS;
+        float fraksi_waktu = (time_32hz - t0) / RAW_SAMPLE_PERIOD_MS;
+        float interpolated = prev_sample_100hz +
+                             (fraksi_waktu * (curr - prev_sample_100hz));
 
-        if (buffer_index < RAW_BUFFER_SIZE) {
-            raw_buffer[buffer_index++] = titik_interpolasi;
-            if (buffer_index >= RAW_BUFFER_SIZE) {
-                is_ready = true;
-            }
-        } else {
-            // Buffer penuh: hentikan penulisan, TAPI jam tetap dimajukan
-            // di bawah supaya tidak ada diskontinuitas saat resume.
-            break;
-        }
-
-        time_32hz += 31.25f;
+        write_to_buffer(interpolated);
+        time_32hz += 31.25f;  // 1000ms / 32Hz = 31.25ms
     }
 
-    prev_sample_100hz = curr_sample_100hz;
+    prev_sample_100hz = curr;
 
+    // Wrap-around untuk mencegah float overflow setelah ~100 detik
     if (time_100hz > 100000.0f) {
         time_100hz -= 100000.0f;
-        time_32hz -= 100000.0f;
+        time_32hz  -= 100000.0f;
     }
 }
 
@@ -149,6 +171,9 @@ void ppg_preprocess_and_feed_int8(int8_t* tflite_input_tensor, float scale, int3
         float norm_n       = (raw_buffer[i] - mean) / std_dev;
         float norm_n_plus1 = (raw_buffer[i + 1] - mean) / std_dev;
         
+        norm_n       = -norm_n;
+        norm_n_plus1 = -norm_n_plus1;
+
         // B. Terapkan rumus kuantisasi Affine (Float -> INT32)
         int32_t q_n       = (int32_t)roundf(norm_n / scale) + zero_point;
         int32_t q_n_plus1 = (int32_t)roundf(norm_n_plus1 / scale) + zero_point;
