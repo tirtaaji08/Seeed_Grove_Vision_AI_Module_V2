@@ -204,3 +204,8 @@ void ppg_shift_buffer() {
     buffer_index = remaining_samples;
     is_ready = false; // Tunggu sampai buffer penuh 257 lagi
 }
+
+void ppg_reset_buffer(){
+    buffer_index = 0;
+    is_ready = false;
+}

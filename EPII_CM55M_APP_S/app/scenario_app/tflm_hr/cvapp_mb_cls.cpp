@@ -245,7 +245,8 @@ int cv_mb_cls_run(int32_t *bpm) {
         active_cycles, 
         idle_cycles);
     // 8. Shift buffer for next window (remove oldest samples)
-    ppg_shift_buffer();	
+    //ppg_shift_buffer();	
+    ppg_reset_buffer();
 	return 0;
 }
 

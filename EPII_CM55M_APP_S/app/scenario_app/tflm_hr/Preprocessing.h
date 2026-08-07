@@ -27,6 +27,7 @@ void ppg_preprocess_and_feed_int8(int8_t* tflite_input_tensor, float scale, int3
 
 // Fungsi untuk menggeser buffer (Sliding Window) setelah inferensi selesai
 void ppg_shift_buffer();
+void ppg_reset_buffer();
 
 #ifdef __cplusplus
 }
